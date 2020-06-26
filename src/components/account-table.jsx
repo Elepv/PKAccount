@@ -4,22 +4,26 @@ import { connect } from "react-redux";
 import Table from 'react-bootstrap/Table'
 
 class AccountTable extends Component {
-    
+
     // 没有实现idx！！！
-    increasement = (idx,name) => {
-        var mymsg = name + "," + 1
+    increasement = (name) => {
+        var mymsg = {
+            name: name,
+            total: 1
+        }
         this.props.modifyAction(mymsg)
 
     }
 
-    decreasement = (idx,name) => {
-        var mymsg = name + "," + (-1)
+    decreasement = (name) => {
+        var mymsg = {
+            name: name,
+            total: -1
+        }
         this.props.modifyAction(mymsg)
     }
     
     render() {
-        const {userinfo} = this.props
-
         return(
             <div className="panel panel-default mt-3">
 
@@ -35,23 +39,25 @@ class AccountTable extends Component {
                         </thead>
                         <tbody>
                         {
-                            userinfo.map((elements,index) => {
+                            this.props.userinfo.map((elements,index) => {
                                 return(
-                                    <tr>
+                                    <tr key={index}>
                                         <th>{ elements.name }</th>
                                         <th>{ elements.total }</th>
                                         <th>
-                                            <button type="button" className="btn btn-primary btn-sm" id={index} onClick={ () => this.increasement(index,elements.name) }>
+                                            <button type="button" className="btn btn-primary btn-sm"  onClick={ () => this.increasement(elements.name) }>
                                                 增加
                                             </button>
                                         </th>
                                         <th>
-                                            <button type="button" className="btn btn-info btn-sm" id={index} onClick={ () => this.decreasement(index,elements.name) }>
+                                            <button type="button" className="btn btn-info btn-sm" onClick={ () => this.decreasement(elements.name) }>
                                                 减少
                                             </button>
                                         </th>
                                     </tr>
+                                    
                                 )
+                                
                             })
                         }
                         </tbody>
@@ -65,18 +71,20 @@ class AccountTable extends Component {
 
 // 接收函数
 const mapStateToProps = state => {
-    return state;
-};
+    return state
+}
 
 // 发送函数
 const mapDispatchToProps = (dispatch) => {
     return {
         modifyAction: (mymsg) => {
             dispatch({
-                type: 'modify'
+                type: 'modify',
+                payload: mymsg
             })
         }
     }
 }
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(AccountTable);

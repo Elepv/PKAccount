@@ -5,7 +5,7 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 
 // 导入组件
-import NavFooter from "./components/navfooter";
+import PkNav from "./components/pk-nav";
 // import Item from "./item";
 
 // import AccountTable from "./account-table";
@@ -15,8 +15,7 @@ function App() {
         return (
             <Provider store={store}>
                 <div>
-                    <div>hello,react</div>
-                    <NavFooter />
+                    <PkNav />
                 </div>
             </Provider>
         )

@@ -72,52 +72,43 @@ const initState = {
             total: 0,
             ureturn: ""
         }
-    ],
-    data: new Date().toLocaleTimeString(),
-    indexactived: true
+    ]
+    // date: new Date().toLocaleTimeString(),
+    // indexactived: true
 }
 
 exports.submitMsg = (state = initState, action) => {
-    console.log("reducer:",action)
-
-    
 
     switch(action.type) {
         case "add":
-            return {
-                state
-            }
+            return state
+
         case "modify":
-
-                const content = state.split(/,|，|\s+/)
-
-                // 事先构造一个插入到state中的对象
-                var note = {name: content[0], total: parseInt(content[1])}
-                var flag = true
-
-                // 将发送来的参数mymsg历遍，和state中的数据进行对比，如何名字相符，则改变对应的total中的数据
-                // 该state的数据是state1 ，每次提交，得到一个新的state数据
-                state.userinfo.map((elements,index) => {
-                    if (elements.name === content[0]) {
-                        if (parseInt(content[1].replace(/[^0-9]/ig,""))) {
-                            elements.total += parseInt(content[1].replace(/[^\d|^\-]/g,""))
-                        } else {
-                            elements.total += 1 
-                        }
-                        flag = false
-                    }
-                })
-                
-
-                if (flag) {
-                    state.userinfo.unshift(note) 
-                }
-                return { state }
-
-        case "del":
-            return {
-                state
+            var newState = JSON.parse(JSON.stringify(state)); 
+            var flag = true
+            for (var i in newState.userinfo) {
+                if (newState.userinfo[i].name === action.payload.name) {
+                    newState.userinfo[i].total += action.payload.total
+                    flag = false
+                } 
             }
+            if (flag) {
+                newState.userinfo.unshift({
+                    name: action.payload.name,
+                    total: action.payload.total
+                })
+            }
+            console.log(newState)
+            return newState
+
+        case "ureturn":
+            var newState = JSON.parse(JSON.stringify(state)); 
+            for (var i in newState.userinfo) {
+                if (newState.userinfo[i].name === action.payload.name) {
+                    newState.userinfo[i].ureturn += action.payload.ureturn
+                } 
+            }
+            return newState
             
         default:
             return state
