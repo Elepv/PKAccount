@@ -1,6 +1,7 @@
 import React, { Component } from "react"
-
 import { connect } from "react-redux"
+
+import Table from 'react-bootstrap/Table'
 
 import FooterModal from "./pk-footer"
 
@@ -76,16 +77,13 @@ class BalanceTable extends Component {
         }
     }
     
-    handleChange = (e,name,totalnum) => {
-
-        const returnnum = e.target.value
-        console.log(e.target)
+    handleChange = (name,returnnum) => {
 
         // 把余码用父组件的方法添加到userinfo中去，调用父组件中的方法
         this.setState({[name]: ( returnnum ? returnnum : 0 )})
         // this.setState({[name]: returnnum })
         var returnmsg = {
-            name: [name],
+            name: name,
             ureturn: ( returnnum ? returnnum : 0 )
         }
         this.props.ureturnAction(returnmsg)
@@ -96,7 +94,7 @@ class BalanceTable extends Component {
         const {userinfo} = this.props
         var acctotal = 0
         var contributiontotal = 0
-        var userstotal = 0
+        // var userstotal = 0
         userinfo.forEach((item,idx,userinfo) => {
             acctotal += (item.ureturn - item.total*1000)
 
@@ -113,7 +111,7 @@ class BalanceTable extends Component {
         this.setState({acctotal})
 
         const {payinfo} = this.state
-        payinfo.map((pelements,pidx) => {
+        payinfo.forEach((pelements) => {
             if (pelements.pname === "胜者支持") {
                 pelements.pnum = contributiontotal
             }
@@ -125,26 +123,60 @@ class BalanceTable extends Component {
         this.setState({ payinfo })
     }
     
+    handlePayinfo = (payname,getval) => {
+
+        const {payinfo} = this.state
+        getval = getval*1
+
+        payinfo.forEach((pelements) => {
+            if (pelements.pname === payname) {
+                if (pelements.type === "支出") {
+                    pelements.pnum = -Math.abs( getval ? getval : 0 ) 
+                } else if (pelements.type === "收入") {
+                    pelements.pnum = ( getval ? getval : 0 )
+                }
+            }
+            this.setState({ payinfo })
+        })
+
+        // 剩余公款的计算
+        var fundtotal = 0
+        payinfo.forEach((item,idx,payinfo) => {
+            fundtotal += item.pnum
+            this.setState({ fundtotal })
+        })
+    }
+
     render() {
+        const {userinfo} = this.props
+        const {payinfo} = this.state
+
+        // 条件渲染
+        var labelcontent = ""
+        if (this.state.acctotal!==0) {
+            labelcontent = "请核对"
+        } else {
+            labelcontent = "核对无误"
+        }
         return(
             <div>
 
-                <div className="panel-heading mt-3 mx-1"><h5>汇总明细表</h5></div>
+                {/* <div className="panel-heading mt-3 mx-1"><h5>汇总明细表</h5></div> */}
 
-                <table striped bordered hover size="sm" responsive="sm">
+                <Table striped bordered hover size="sm" responsive="sm">
                     <thead className="thead-dark">
                         <tr>
                             <th>称呼</th>
-                            <th>总拿码</th>
-                            <th>合计码量</th>
-                            <th>贡献值</th>
+                            {/* <th>总拿码</th> */}
+                            <th>合计</th>
+                            <th>贡献</th>
                             <th className="table-danger">发放</th>
-                            <th width="25%">退码量</th>
+                            <th width="25%">退码</th>
                         </tr>    
                     </thead>
                     <tbody>
                         {
-                            this.props.userinfo.map((elements,index) => {
+                            userinfo.map((elements,index) => {
 
                                 // 退码量，调用父组件传来的参数，显示在input中和它联动
                                 var returnnum = elements.ureturn
@@ -162,7 +194,7 @@ class BalanceTable extends Component {
                                 return(
                                     <tr key={index}>
                                         <th>{ elements.name }</th>
-                                        <th>{ totalnum }</th>
+                                        {/* <th>{ totalnum }</th> */}
                                         <th>{ restnum }</th>
                                         <th>{ contribution }</th>
                                         <th className="table-danger">{ income/4 }</th>
@@ -172,7 +204,7 @@ class BalanceTable extends Component {
                                                 placeholder="余码" 
                                                 value = { returnnum } 
                                                 onChange = { (e) => {
-                                                    this.handleChange(elements.name,totalnum); 
+                                                    this.handleChange(elements.name,e.target.value); 
                                                     this.changeTotal();
                                                 }} 
                                             />
@@ -182,16 +214,16 @@ class BalanceTable extends Component {
                             })
                         }
                     </tbody>
-                </table>
+                </Table>
 
                 {/* 拿码退码核对部分 */}
                 <div className="alert alert-dark pt-3" role="alert">
-                    <h3><small className="mr-4">labelcontent</small><span variant="badge badge-warning">0码</span></h3>
+                    <h3><small className="mr-4">{ labelcontent }</small><span variant="badge badge-warning">{ this.state.acctotal }码</span></h3>
                 </div>
 
                 <div className="panel-heading mx-1"><h5>本场开支明细表</h5></div>
 
-                <table striped bordered hover size="sm">
+                <Table striped bordered hover size="sm">
                     <thead className="thead-dark">
                         <tr>
                             <th width="30%">明细</th>
@@ -200,24 +232,47 @@ class BalanceTable extends Component {
                         </tr>    
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>
-                                mingxi1
-                            </th>
-                            <th>
-                                leixing2
-                            </th>
-                            <th>
-                                jine3
-                                {/* <input type="number" className="form-control" placeholder="开支"/> */}
-                            </th>
-                        </tr>
+                    {
+                        payinfo.map((elems,idx) => {
+
+                            return( 
+                                <tr key={idx}>
+                                    <th>
+                                        {elems.pname} 
+                                        {/* <input type="text" className="form-control" id="disabledInput" placeholder="明细" value={ elems.pname } onChange={ (e) => {
+                                            this.handlePayinfo(elems.pname);
+                                            }} 
+                                        /> */}
+                                    </th>
+                                    <th>
+                                        {elems.type}
+                                    </th>
+                                    
+                                    {/* <th><input type="number" className="form-control" placeholder="收入" value={ ppay } onChange={ (e) => {
+                                            this.handlegaininfo(elems.pname);
+                                            }} 
+                                        />
+                                    </th> */}
+                                    <th><input type="number" className="form-control" placeholder="开支" value={ elems.pnum } onChange={ (e) => {
+                                            this.handlePayinfo(elems.pname,e.target.value);
+                                            }} 
+                                        />
+                                    </th>
+                                    {/* <th><input type="text" className="form-control" placeholder="备注" value={ this.state.textinfo } onChange={ (e) => {
+                                            this.handletextinfo(elems.pname);
+                                            }} 
+                                        />
+                                    </th> */}
+                                </tr>
+                            )
+                        })
+                    }
                     </tbody>
-                </table>
+                </Table>
 
                 {/* 开支核对部分 */}
                 <div className="alert alert-dark pt-3" role="alert">
-                    <h3><small className="mr-4">公款余额</small><span variant="badge badge-success">0元</span></h3>
+                    <h3><small className="mr-4">公款余额</small><span variant="badge badge-success">{ this.state.fundtotal }元</span></h3>
                 </div>
 
                 {/* footer */}

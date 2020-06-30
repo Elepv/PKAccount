@@ -80,8 +80,8 @@ const initState = {
 exports.submitMsg = (state = initState, action) => {
 
     switch(action.type) {
-        case "add":
-            return state
+        // case "add":
+        //     return state
 
         case "modify":
             var newState = JSON.parse(JSON.stringify(state)); 
@@ -98,17 +98,16 @@ exports.submitMsg = (state = initState, action) => {
                     total: action.payload.total
                 })
             }
-            console.log(newState)
             return newState
 
         case "ureturn":
-            var newState = JSON.parse(JSON.stringify(state)); 
-            for (var i in newState.userinfo) {
-                if (newState.userinfo[i].name === action.payload.name) {
-                    newState.userinfo[i].ureturn += action.payload.ureturn
-                } 
+            var newStateU = JSON.parse(JSON.stringify(state)); 
+            for (var j in newStateU.userinfo) {
+                if (newStateU.userinfo[j].name === action.payload.name) {
+                    newStateU.userinfo[j].ureturn = action.payload.ureturn*1
+                }
             }
-            return newState
+            return newStateU
             
         default:
             return state

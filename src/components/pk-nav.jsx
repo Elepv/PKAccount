@@ -31,7 +31,7 @@ export default class PkNav extends Component {
 
 
         return (
-            <div>
+            <div className="mx-1">
                 {/* header nav */}
                 <Nav variant="pills nav-fill my-3 mx-1" defaultActiveKey="account" onSelect={ (eventKey) => this.handleSelect(eventKey) }>
                     <Nav.Item>

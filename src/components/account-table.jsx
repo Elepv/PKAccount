@@ -12,7 +12,6 @@ class AccountTable extends Component {
             total: 1
         }
         this.props.modifyAction(mymsg)
-
     }
 
     decreasement = (name) => {

@@ -53,7 +53,6 @@ class MessageSent extends Component {
 
  
     handleClick = () => {
-        const {userinfo} = this.props
         const {inputmsg} = this.state
         const mymsg = this.noteInput.value
         // if(!mymsg){
@@ -85,16 +84,7 @@ class MessageSent extends Component {
         var sentmsg = {}
         var pnum = content[1].replace(/[^0-9]/ig,"")
 
-        if (pnum) {
-            for (let i in userinfo) {
-                if (userinfo[i].name === content[0]) {
-                    sentmsg = {
-                        name: userinfo[i].name,
-                        total: parseInt(pnum)
-                    }
-                    this.props.modifyAction(sentmsg)
-                } 
-            }
+        if (pnum) { 
             sentmsg = {
                 name: content[0],
                 total: parseInt(pnum)
@@ -102,22 +92,11 @@ class MessageSent extends Component {
             this.props.modifyAction(sentmsg)
         } else {
             for (var i = 0; i < content.length; i++) {
-                for (let j in userinfo) {
-                    if (userinfo[j].name === content[i]) {
-                        sentmsg = {
-                            name: userinfo[j].name,
-                            total: userinfo[j].total += 1
-                        }
-                    } else {
-                        continue
-                    }
-                    sentmsg = {
-                        name: content[i],
-                        total: 1
-                    }
-
-                    this.props.modifyAction(sentmsg)
+                sentmsg = {
+                    name: content[i],
+                    total: 1
                 }
+                this.props.modifyAction(sentmsg)
             }
         }
 
@@ -205,13 +184,13 @@ class MessageSent extends Component {
             <div className = "my-3">
                 <InputGroup>
                     <FormControl
-                        placeholder="姓名，几手，被谁打光 or 余码几手"
+                        placeholder="姓名，几手，被谁打光 or 余几手"
                         aria-label="sentmsg"
                         aria-describedby="sentmsg"
                         ref={input => this.noteInput = input} 
                         onKeyDown={ (e) => this.onkeydown(e) }                
                     />
-                    <InputGroup.Append>
+                    <InputGroup.Append  className="mr-3">
                         <Button variant="outline-success" onClick={this.handleClick}>发送</Button>
                         <DropdownButton
                             as={InputGroup.Append}
