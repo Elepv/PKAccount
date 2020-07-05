@@ -17,6 +17,8 @@ export default function FooterModal() {
         setShow(false)
         localStorage.clear()
         window.location.reload()
+        // console.log('1',localStorage.getItem('inputmsg_json'))
+        console.log('2',localStorage.getItem('state'))
     }
 
     return (

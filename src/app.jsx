@@ -19,11 +19,16 @@ const saveState = (state) => {
     }
 }
 
+// 页面刷新时存储state，但是和清除state冲突。
+// window.onbeforeunload = (e) => {
+//     const state = store.getState();
+//     saveState(state);
+// }
 
-window.onbeforeunload = (e) => {
+store.subscribe(() => {
     const state = store.getState();
     saveState(state);
-}  
+})
   
 
 function App() {
