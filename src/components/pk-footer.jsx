@@ -12,6 +12,12 @@ export default function FooterModal() {
     const handleClose = () => setShow(false);
     const handleLgClose = () => setLgShow(false);
     // const handleShow = () => setShow(true);
+    
+    const handleReset = () => {
+        setShow(false)
+        localStorage.clear()
+        window.location.reload()
+    }
 
     return (
     <>
@@ -45,7 +51,7 @@ export default function FooterModal() {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="danger" onClick={handleClose}>
+                <Button variant="danger" onClick={ handleReset }>
                     确认清除！
                 </Button>
             </Modal.Footer>

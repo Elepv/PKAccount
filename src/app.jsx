@@ -10,6 +10,22 @@ import PkNav from "./components/pk-nav";
 
 // import AccountTable from "./account-table";
 
+const saveState = (state) => {
+    try {
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem('state', serializedState);
+    } catch (err) {
+      // ...错误处理
+    }
+}
+
+
+window.onbeforeunload = (e) => {
+    const state = store.getState();
+    saveState(state);
+}  
+  
+
 function App() {
 
         return (
