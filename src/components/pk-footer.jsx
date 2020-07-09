@@ -9,7 +9,12 @@ export default function FooterModal() {
     const [show, setShow] = useState(false);
     const [lgShow, setLgShow] = useState(false);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {npm install aws-sdk
+        localStorage.clear()
+        window.location.reload() 
+        setShow(false);
+    }
+
     const handleLgClose = () => setLgShow(false);
     // const handleShow = () => setShow(true);
     
@@ -51,7 +56,8 @@ export default function FooterModal() {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="danger" onClick={ handleReset }>
+
+                <Button variant="danger" onClick = {handleClose}>
                     确认清除！
                 </Button>
             </Modal.Footer>
