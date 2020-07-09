@@ -30,14 +30,8 @@ class MessageSent extends Component {
 
     }
 
-<<<<<<< HEAD
     componentWillMount() {
         var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
-=======
-    // componentWillMount() {
-    //     // const {inputmsg} = this.state
-    //     var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
->>>>>>> e29ced69b4b37db22cb02c82548a7884c5f3e699
 
         if (ipmsg) {
             this.setState({
