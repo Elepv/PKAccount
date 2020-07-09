@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
+import api from '../api';
 class Item extends Component {
+    api.login
     render() {
         return <div>nav</div>;
     }
