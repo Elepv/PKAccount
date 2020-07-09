@@ -30,8 +30,14 @@ class MessageSent extends Component {
 
     }
 
+<<<<<<< HEAD
     componentWillMount() {
         var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
+=======
+    // componentWillMount() {
+    //     // const {inputmsg} = this.state
+    //     var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
+>>>>>>> e29ced69b4b37db22cb02c82548a7884c5f3e699
 
         if (ipmsg) {
             this.setState({
@@ -40,17 +46,9 @@ class MessageSent extends Component {
         }
     }
 
-    // handler = () => {
-    //     this.props.todo();
-    //     this.props.stoptodo();
-    // };
-
 
     // store的dispatch的三种方式：
     // 1. 增加。 2. 撤回。 3. 删除
-
-
- 
     handleClick = () => {
         const {inputmsg} = this.state
         const mymsg = this.noteInput.value

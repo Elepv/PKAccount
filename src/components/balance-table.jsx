@@ -54,17 +54,7 @@ class BalanceTable extends Component {
                     pnum: 0,
                 },
                 {
-                    pname: "其他支出1",
-                    type: "支出",
-                    pnum: 0,
-                },
-                {
-                    pname: "其他支出2",
-                    type: "支出",
-                    pnum: 0,
-                },
-                {
-                    pname: "其他支出3",
+                    pname: "其他支出",
                     type: "支出",
                     pnum: 0,
                 },
