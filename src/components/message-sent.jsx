@@ -30,16 +30,15 @@ class MessageSent extends Component {
 
     }
 
-    // componentWillMount() {
-    //     const {inputmsg} = this.state
-    //     var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
+    componentWillMount() {
+        var ipmsg = JSON.parse(localStorage.getItem("inputmsg_json"))
 
-    //     if (ipmsg) {
-    //         this.setState({
-    //             inputmsg: ipmsg
-    //         })
-    //     }
-    // }
+        if (ipmsg) {
+            this.setState({
+                inputmsg: ipmsg
+            })
+        }
+    }
 
     // handler = () => {
     //     this.props.todo();
@@ -99,48 +98,6 @@ class MessageSent extends Component {
                 this.props.modifyAction(sentmsg)
             }
         }
-
-
-
-
-        // 维护store中的主要的全局的属性。将inputmsg中的部分属性同步到store中去
-
-        // 事先构造一个插入到state中的对象
-        // var note = {name: content[0], total: parseInt(content[1])}
-
-        // var flag = true
-
-        // 将发送来的参数mymsg历遍，和state中的数据进行对比，如何名字相符，则改变对应的total中的数据
-        // 该state的数据是state1 ，每次提交，得到一个新的state数据
-        // for(var i = 0; i < content.length; i++) {
-        //     userinfo.map((elements) => {
-        //         if (elements.name === content[i]) {
-        //             if (parseInt(content[1].replace(/[^0-9]/ig,""))) {
-        //                 elements.total += parseInt(content[1].replace(/[^\d|^\-]/g,""))
-        //             } else {
-        //                 elements.total += 1 
-        //             }
-        //             var sendmymsg = {
-        //                 name: elements.name,
-        //                 num: elements.total
-        //             }
-        //             this.props.modifyAction(sendmymsg)
-        //             // flag = false
-        //         }
-        //     })
-        // }
-
-        // if (flag) {
-        //     userinfo.unshift(note) 
-        // }
-
-        // this.setState({userinfo})
-
-        // var jsoncontent = JSON.stringify(userinfo)
-        // localStorage.setItem("userinfo_json",jsoncontent)
-
-        //   var blob = new Blob([jsoncontent], {type: "text/plain;charset=utf-8"})
-        //   saveAs(blob, "pokerdata.json")
     }
     
 
@@ -151,13 +108,36 @@ class MessageSent extends Component {
         }
     }
 
-    handleClose = (idx) => {
+    // 删除信息流，并更新添加的数据
+    handleClose = (e,i) => {
         const {inputmsg} = this.state
-        inputmsg.splice(idx, 1)
+        console.log('e',e)
+        // console.log('i',i)
+        inputmsg.splice(i, 1)
         this.setState({inputmsg})
+        var jsonipmsg = JSON.stringify(inputmsg)
+        localStorage.setItem("inputmsg_json",jsonipmsg)
+
+        // var sentmsg
+        // // if (e.num) { 
+        //     sentmsg = {
+        //         name: e.name,
+        //         total: -parseInt(e.num)
+        //     }
+        //     this.props.modifyAction(sentmsg)
+        // // } else {
+        // //     for (var i = 0; i < content.length; i++) {
+        // //         sentmsg = {
+        // //             name: content[i],
+        // //             total: 1
+        // //         }
+        // //         this.props.modifyAction(sentmsg)
+        // //     }
+        // // }
     }
 
 
+    // 控制信息流中的删除图标
     toggleCloseButton = () => {
         const {showCloseButton} = this.state
         if (showCloseButton) {
@@ -166,9 +146,9 @@ class MessageSent extends Component {
             this.setState({isshow: true})
             window.setTimeout(() => { 
                 this.setState({showCloseButton: false},
-                window.location.reload()
+                // window.location.reload()
             )},
-            6000)
+            5000)
         }
 
         // 维护store中全局的属性。将inputmsg中的数据同步到store中 
@@ -216,7 +196,7 @@ class MessageSent extends Component {
                         return(
                             <Toast
                                 key={idx} 
-                                onClose={ (idx) => this.handleClose(idx) }
+                                onClose={ () => this.handleClose(elements,idx) }
                             >
                                 <Toast.Header closeButton = { this.state.isshow } >
                                     <strong className="mr-auto">{elements.name}</strong>
